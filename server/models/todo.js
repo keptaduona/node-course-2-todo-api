@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 // Create a new model
-var  Todo = mongoose.model('Todo', {
+var Todo = mongoose.model('Todo', {
   text: {
     // Type is String but mongoose will cast numbers and bools to strings
     type: String,
