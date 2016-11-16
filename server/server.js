@@ -73,18 +73,6 @@ app.delete('/todos/:id', (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
 });
