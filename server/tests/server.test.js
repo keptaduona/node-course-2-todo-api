@@ -3,14 +3,27 @@ const request = require('supertest');
 
 const {app} = require('./../server.js');
 const {Todo} = require('./../models/todo.js');
+
+
+
+// Add seed data(todos that wont get removed by beforeEach)
+const todos = [{
+  text: 'First test todo'
+}, {
+  text: 'Second test todo'
+}]
+
+
 // run some code before every test
 beforeEach((done) => {
-  Todo.remove({/*an empty object will remove everything*/}).then(() => done());
+  Todo.remove({/*an empty object will remove everything*/}).then(() => {
+    return Todo.insertMany(todos) //add SEED data
+  }).then(() => done());
 });
 
 describe('POST /todos', () => {
   it('should create a new todo', (done) => {
-    var text = 'Test todo text';
+  var text = 'Test todo text';
 
     request(app)
       .post('/todos')
@@ -24,7 +37,7 @@ describe('POST /todos', () => {
           return done(err);
         }
 
-        Todo.find().then((todos) => {
+        Todo.find({text}).then((todos) => {
           expect(todos.length).toBe(1);
           expect(todos[0].text).toBe(text)
           done();
@@ -43,10 +56,22 @@ describe('POST /todos', () => {
         }
 
         Todo.find().then((todos) => {
-          expect(todos.length).toBe(0);
+          expect(todos.length).toBe(2);
           done();
       }).catch((e) => done(e));
     })
   });
 });
 //len todos is 0
+
+describe('GET /todos', () => {
+  it('should get all todos', (done) => {
+    request(app)
+      .get('/todos')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todos.length).toBe(2);
+      })
+      .end(done);
+  })
+})
