@@ -1,3 +1,5 @@
+require('./config/config.js')
+
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,7 +11,7 @@ var {User} = require('./models/user.js');
 
 var app = express();
 //for heroku
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 // crud = create read update delete
 // 1. use MIDDLEWARE - bodyparser to send json to express
