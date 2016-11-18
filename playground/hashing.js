@@ -26,6 +26,22 @@ const {SHA256} = require('crypto-js'); //just playground
 
 // RAEL SHIT STARTS NOW
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+var password = '123abc!';
+
+// bcrypt.genSalt(10, (err, salt) => {
+//   bcrypt.hash(password, salt, (err, hash) => {
+//     console.log(hash);
+//   });
+// });
+
+var hashedPassword = '$2a$10$qPLD43EXo3m7JiuUA0XbKe6CzVtqG8Atw0IYdIoG2q1MnS2IYTQNG';
+
+bcrypt.compare(password, hashedPassword, (err, res) => {
+  console.log(res);
+});
+//
 
 var data = {
   id: 10
