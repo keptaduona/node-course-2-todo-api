@@ -46,6 +46,7 @@ UserSchema.methods.toJSON = function() {
 // create isntance method for authentication
 UserSchema.methods.generateAuthToken = function() {
   var user = this;
+  console.log(user);
   var access = 'auth';
   var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
 
@@ -54,6 +55,23 @@ UserSchema.methods.generateAuthToken = function() {
   return user.save().then(() => {
     return token;
   })
+};
+
+UserSchema.statics.findByToken = function (token) {
+  var User = this;
+  var decoded;
+
+  try {
+    decoded = jwt.verify(token, 'abc123');
+  } catch (e) {
+    return Promise.reject();
+  }
+
+  return User.findOne({
+    '_id': decoded._id,
+    'tokens.token': token,
+    'tokens.access': 'auth' //need quotes when we're calling something with a .(dot)
+  });
 };
 
 var  User = mongoose.model('User', UserSchema);
