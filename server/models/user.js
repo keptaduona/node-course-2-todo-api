@@ -73,6 +73,26 @@ UserSchema.statics.findByToken = function (token) { //this is a model method
     'tokens.access': 'auth' //need quotes when we're calling something with a .(dot)
   });
 };
+
+UserSchema.statics.findByCredentials = function(email, password) {
+  var User = this;
+
+  return User.findOne({email}).then((user) => {
+    if (!user) {
+      return Promise.reject();
+    }
+    // bcrypt doesnt support promises
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          resolve(user)
+        } else {
+          reject();
+        }
+      })
+    })
+  });
+};
 //add middleware to store hashed passwords
 UserSchema.pre('save', function(next) {
   var user = this;
