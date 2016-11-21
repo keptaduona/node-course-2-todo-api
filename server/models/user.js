@@ -57,7 +57,7 @@ UserSchema.methods.generateAuthToken = function() {
   })
 };
 
-UserSchema.statics.findByToken = function (token) {
+UserSchema.statics.findByToken = function (token) { //this is a model method
   var User = this;
   var decoded;
 
@@ -87,6 +87,6 @@ UserSchema.pre('save', function(next) {
   }
 });
 
-var  User = mongoose.model('User', UserSchema);
+var User = mongoose.model('User', UserSchema);
 
 module.exports = {User};
